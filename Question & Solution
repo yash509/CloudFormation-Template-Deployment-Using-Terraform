@@ -1,0 +1,102 @@
+Ques:-
+
+The Nautilus DevOps team is working on automating infrastructure deployment using AWS CloudFormation. As part of this effort, they need to create a CloudFormation stack that provisions an S3 bucket with versioning enabled.
+
+Create a CloudFormation stack named xfusion-stack using Terraform. This stack should contain an S3 bucket named xfusion-bucket-23918 as a resource, and the bucket must have versioning enabled. The Terraform working directory is /home/bob/terraform. Create the main.tf file (do not create a different .tf file) to accomplish this task.
+
+Note: Right-click under the EXPLORER section in VS Code and select Open in Integrated Terminal to launch the terminal.
+
+
+
+
+Soln:-
+
+Step 1:- Navigate to your Terraform working directory
+
+cd /home/bob/terraform
+
+
+
+Step 2:- Verify the provider.tf file with the following content:
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "5.91.0"
+    }
+  }
+}
+
+provider "aws" {
+  region                      = "us-east-1"
+  skip_credentials_validation = true
+  skip_requesting_account_id  = true
+  s3_use_path_style = true
+
+endpoints {
+    ec2            = "http://aws:4566"
+    apigateway     = "http://aws:4566"
+    cloudformation = "http://aws:4566"
+    cloudwatch     = "http://aws:4566"
+    dynamodb       = "http://aws:4566"
+    es             = "http://aws:4566"
+    firehose       = "http://aws:4566"
+    iam            = "http://aws:4566"
+    kinesis        = "http://aws:4566"
+    lambda         = "http://aws:4566"
+    route53        = "http://aws:4566"
+    redshift       = "http://aws:4566"
+    s3             = "http://aws:4566"
+    secretsmanager = "http://aws:4566"
+    ses            = "http://aws:4566"
+    sns            = "http://aws:4566"
+    sqs            = "http://aws:4566"
+    ssm            = "http://aws:4566"
+    stepfunctions  = "http://aws:4566"
+    sts            = "http://aws:4566"
+    rds            = "http://aws:4566"
+  }
+}
+
+
+
+Step 3:- Create the main.tf file with the following content: 
+
+resource "aws_cloudformation_stack" "xfusion_stack" {
+  name          = "xfusion-stack"
+  template_body = <<STACK
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation stack to create S3 bucket with versioning",
+  "Resources": {
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "xfusion-bucket-23918",
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      }
+    }
+  }
+}
+STACK
+}
+
+
+Step 4:- Initialize Terraform in the directory
+	
+terraform init
+
+
+
+Step 5:- Plan the configuration in the directory
+
+terraform plan
+
+
+
+Step 6:- Apply the configuration to create the key pair
+
+terraform apply --auto-approve
